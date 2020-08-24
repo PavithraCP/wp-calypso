@@ -54,7 +54,7 @@
 		"gutenboarding/style-preview-verticals": false,
 		"gutenboarding/alpha-templates": true,
 		"gutenboarding/language-picker": false,
-		"gutenboarding/feature-picker": true,
+		"gutenboarding/feature-picker": false,
 		"gutenboarding/new-launch": true,
 		"happychat": true,
 		"help": true,
