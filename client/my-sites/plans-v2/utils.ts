@@ -3,7 +3,7 @@
  */
 import { translate, TranslateResult } from 'i18n-calypso';
 import { compact, get, isArray, isObject } from 'lodash';
-import { createElement, Fragment } from 'react';
+import React, { createElement, Fragment } from 'react';
 
 /**
  * Internal dependencies
@@ -416,3 +416,64 @@ export function isUpgradeable( slug: string ): boolean {
 export function getProductUpsell( slug: string ): string | null {
 	return UPSELL_PRODUCT_MATRIX[ slug ];
 }
+
+/** If plan offers 'realtime' and 'daily' options, AND plan is not already owned,
+ * append "Available Options: Real-time and Daily" to the plan description.
+ *
+ * @param product SelectorProduct
+ * @param currentPlan string
+ *
+ * @returns ReactNode
+ */
+export const getJetpackPlanDescriptionWithOptions = (
+	product: SelectorProduct,
+	currentPlan: string | null
+): React.ReactNode | TranslateResult => {
+	const em = React.createElement( 'em', null, null );
+
+	// check if 'subtypes' property contains daily and real-time options.
+	// and check that this product is not owned.
+	return product.subtypes?.filter( ( subtype ) => /_(daily|realtime)/.test( subtype ) ).length >=
+		2 &&
+		currentPlan &&
+		! product.subtypes.includes( currentPlan )
+		? translate( '%(productDescription)s {{em}}Available options: Real-time or Daily.{{/em}}', {
+				args: {
+					productDescription: product.description,
+				},
+				components: {
+					em,
+				},
+		  } )
+		: product.description;
+};
+
+/**
+ * If product offers 'realtime' and 'daily' options, AND product is not already owned,
+ * append "Available Options: Real-time and Daily" to the product description.
+ *
+ * @param product SelectorProduct
+ * @param currentProducts array
+ *
+ * @returns ReactNode
+ */
+export const getJetpackProductDescriptionWithOptions = (
+	product: SelectorProduct,
+	currentProducts: string[]
+): React.ReactNode | TranslateResult => {
+	const em = React.createElement( 'em', null, null );
+
+	// check if 'subtypes' property contains daily and real-time options.
+	// and check that this product is not owned.
+	return product.subtypes?.filter( ( subtype ) => /_(daily|realtime)/.test( subtype ) ).length >=
+		2 && ! currentProducts.includes( product.productSlug )
+		? translate( '%(productDescription)s {{em}}Available options: Real-time or Daily.{{/em}}', {
+				args: {
+					productDescription: product.description,
+				},
+				components: {
+					em,
+				},
+		  } )
+		: product.description;
+};
