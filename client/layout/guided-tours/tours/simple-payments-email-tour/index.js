@@ -3,7 +3,6 @@
  */
 
 import React, { Fragment } from 'react';
-import { includes } from 'lodash';
 
 /**
  * Internal dependencies
@@ -19,12 +18,8 @@ import {
 	Quit,
 } from 'layout/guided-tours/config-elements';
 import { AddContentButton } from 'layout/guided-tours/button-labels';
-import { getSectionName, hasSidebar } from 'state/ui/selectors';
 import { targetForSlug } from 'layout/guided-tours/positioning';
 import { localizeUrl } from 'lib/i18n-utils';
-
-const sectionHasSidebar = ( state ) =>
-	hasSidebar( state ) && ! includes( [ 'customize' ], getSectionName( state ) );
 
 // When moving from stats to the editor, the menu disappears, the first step
 // loses its target, and it repositions in the top left corner.
@@ -85,7 +80,7 @@ export const SimplePaymentsEmailTour = makeTour(
 			arrow="left-top"
 			style={ { animationDelay: '2s', marginTop: '-5px' } }
 			onTargetDisappear={ handleTargetDisappear }
-			when={ sectionHasSidebar }
+			when={ true }
 			keepRepositioning
 			scrollContainer=".sidebar__region"
 			shouldScrollTo
